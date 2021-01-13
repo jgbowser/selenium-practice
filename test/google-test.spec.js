@@ -10,24 +10,16 @@ describe('test test', () => {
 })
 
 describe('Selenium google title test', () => {
+  const driver = new Builder().forBrowser('firefox').build();
 
-  let driver;
-
-  beforeEach('set up browser', (done) => {
-    driver = new Builder().forBrowser('firefox').build();
-    done();
+  it('should navigate to Google and find the page title', async () => {
+    await (await driver).get('http://google.com');
+    const title = await driver.getTitle();
+    console.log(title);
+    expect(title).to.eql('Google');
   });
 
-  afterEach('kill browser', (done) => {
-    driver.quit();
-    done();
-  })
-
-  it('correctly navigates to google and retrieves the page title', async (done) => {
-    await driver.get('http://google.com');
-    const title = await driver.getTitle()
-    expect(() => {
-      title === 'Google'
-    });
+  after(async () => {
+    await driver.quit()
   });
-})
+});
